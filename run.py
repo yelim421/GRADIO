@@ -5,11 +5,17 @@ tts_examples = [
     "How do you do?",
 ]
 
-tts_demo = gr.load(
-    "huggingface/facebook/fastspeech2-en-ljspeech",
-    title=None,
-    examples=tts_examples,
-    description="Give me something to say!",
+def greet():
+    print("Hello, Gradio")
+    return ""
+
+readme = gr.Interface(
+    fn=greet,
+    inputs=None,
+    outputs="text",
+    title="Title of the Gradio Interface",
+    description="This is a simple Gradio Interface that returns a greeting.",
+    article="<p style='text-align: center'>Welcome to this Gradio Interface!</p>"
 )
 
 stt_demo = gr.load(
@@ -40,7 +46,7 @@ about_us = gr.load(
     description="Give me something to say!",
 )
 
-demo = gr.TabbedInterface([tts_demo, stt_demo, future_pred, info_page, about_us], ["ReadMe", "Data Analysis", "Future Prediction", "More Information", "About Us"])
+demo = gr.TabbedInterface([readme, stt_demo, future_pred, info_page, about_us], ["ReadMe", "Data Analysis", "Future Prediction", "More Information", "About Us"])
 
 if __name__ == "__main__":
     demo.launch()
