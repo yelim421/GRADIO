@@ -1,0 +1,108 @@
+<p style="text-align:center"><strong><span style="font-size:26px">DETAILS</span></strong></p>
+
+<hr />
+<div style="padding-left: 100px; padding-right: 100px;">
+  <h2><strong>AI Weather Forecast</strong></h2>
+
+  <p>Modern numerical weather prediction (NWP) can be traced back to 1920. It&#39;s based on physical principles and integrates the achievements and experiences of several generations of meteorologists. It&#39;s the mainstream weather forecasting method adopted by meteorological departments around the world. Among them, the high-resolution integrated forecasting system (IFS) model from the European Centre for Medium-Range Weather Forecasts (ECMWF) has performed best in global weather forecasts over the years.</p>
+
+  <p>Recently, at the just-concluded Nvidia GTC Technology Conference, researchers from NVIDIA, Lawrence Berkeley National Laboratory, the University of Michigan Ann Arbor, and Rice University developed a forecast model based on the Fourier Neural Network called FourCastNet. It can generate global key weather indicator forecasts at a resolution of 0.25&deg;, which is equivalent to a spatial resolution of about 30&times;30 km near the equator and a global grid size of 720&times;1440 pixels, consistent with the IFS system. This achievement allows AI weather models to be directly compared with traditional physical models such as the IFS for the first time.</p>
+
+  <p>FourCastNet uses GPU for training computations, which is about 45,000 times faster than traditional NWP models and saves energy by about 12,000 times. This allows it to generate a large number of sub-models for ensemble predictions at a very low cost. Experiments show that FourCastNet greatly improves the effectiveness of probabilistic weather forecasting and can generate large-scale ensemble forecasts for hurricanes, atmospheric rivers, and extreme precipitation events in just a few seconds.</p>
+
+  <p>In our project, we focused on studying the integration of FCN, which was trained on ERA5 data, with the JMA Best Track data. This effort aims to harness the robust predictive power of FCN and the highly accurate historical records of the JMA to enhance the accuracy and efficiency of our weather forecasting model.</p>
+
+  <h2><strong>Datasets</strong></h2>
+
+  <p>The European Centre for Medium-Range Weather Forecasts (ECMWF) provides a publicly available integrated dataset known as <a href="https://www.ecmwf.int/en/forecasts/datasets/reanalysis-datasets/era5">ERA5</a>. As the fifth-generation global climate reanalysis, ERA5 combines its physical model data with observational data from around the world to form a complete and consistent global dataset. This data ranges from hourly to daily and includes a variety of global meteorological indicators such as temperature, wind volume, precipitation, hydrology, and atmospheric pressure. It serves as a learning resource for various weather forecasting models.&nbsp;</p>
+
+  <p>FourCastNet uses ERA5 for training and focuses on forecasting two major meteorological variables: wind speed at 10 meters above the Earth&#39;s surface and the total precipitation over 6 hours. These factors are essential for issuing early warnings of extreme weather and natural disasters. The prediction of these two indicators is also considered one of the more challenging problems in the field of meteorology.</p>
+
+  <p>To this end, FourCastNet selected 20 relevant meteorological indicators, including potential height, temperature, wind speed, and relative humidity at several different vertical heights, as well as some near-surface variables such as ground pressure and mean sea-level pressure. These serve as inputs to the model to uncover the impact of the relationships among these variables on wind speed and precipitation. The specific variables are as follows:</p>
+
+  <table align="center" border="2" style="width:500px">
+      <thead>
+          <tr>
+              <th scope="col", style="text-align:center">Vertical Level</th>
+              <th scope="col", style="text-align:center">Variables</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr>
+              <td style="text-align:center">Surface</td>
+              <td style="text-align:center">U<span style="font-size:13.3333px"><sub>10</sub>, </span>V<span style="font-size:13.3333px"><sub>10</sub>, </span>T<span style="font-size:13.3333px"><sub>2m</sub>, sp, mslp</span></td>
+          </tr>
+          <tr>
+              <td style="text-align:center">1000hPa</td>
+              <td style="text-align:center">U, V<span style="font-size:13.3333px">,&nbsp;</span>Z</td>
+          </tr>
+          <tr>
+              <td style="text-align:center">850hPa</td>
+              <td style="text-align:center">T, U, V, Z, RH</td>
+          </tr>
+          <tr>
+              <td style="text-align:center">500hPa</td>
+              <td style="text-align:center">T, U, V, Z, RH</td>
+          </tr>
+          <tr>
+              <td style="text-align:center">50hPa</td>
+              <td style="text-align:center">Z</td>
+          </tr>
+          <tr>
+              <td style="text-align:center">Integrated</td>
+              <td style="text-align:center">TCWV</td>
+          </tr>
+      </tbody>
+  </table>
+
+  <ol>
+      <li>
+      <p>Surface Level Variables:</p>
+
+      <ul>
+          <li>U10, V10: Eastward and northward wind components at 10 meters above ground.</li>
+          <li>T2m: Temperature 2 meters above the ground.</li>
+          <li>sp and mslp: Atmospheric pressure at the Earth&#39;s surface and sea level respectively, crucial for predicting weather patterns and storm paths.</li>
+      </ul>
+      </li>
+      <li>
+      <p>1000hPa, 850hPa, 500hPa and 50hPa&nbsp;Level Variables:</p>
+
+      <ul>
+          <li>U, V: Eastward and northward wind components at respective pressure levels, used for understanding wind patterns at different altitudes.</li>
+          <li>T: Temperature at respective pressure levels, valuable for predicting weather patterns.</li>
+          <li>Z: Geopotential height at respective pressure levels, a key parameter for predicting height of a pressure surface above mean sea level.</li>
+          <li>RH: Relative humidity at the 850 hPa and 500 hPa levels, representing atmospheric moisture content.</li>
+      </ul>
+      </li>
+      <li>
+      <p>Integrated Variables:</p>
+
+      <ul>
+          <li>TCWV: Total column water vapor, crucial for predicting precipitation, as it represents the total amount of water vapor in a vertical column of atmosphere.</li>
+      </ul>
+      </li>
+  </ol>
+
+  <h2><strong>Model Introduction</strong></h2>
+
+  <p>To make global weather predictions at a 0.25&deg; resolution, FourCastNet uses Adaptive Fourier Neural Operator (AFNO), an improvement on the Vision Transformer (ViT) model. It constructs the mixing operation steps into continuous global convolutions, effectively implemented in the Fourier domain through FFT. This design reduces the spatial mixing complexity to O(N log N), allowing flexible and scalable modeling of cross-space and channel dependencies. The structure of AFNO is shown in the following figure:</p>
+
+  <p>&nbsp;</p>
+
+  <p>In the spatial mixing step, GFNet uses cross-channel element-wise matrix multiplication, FNO uses full matrix multiplication mixing all channels, while AFNO combines MLP and soft threshold for block matrix multiplication.</p>
+
+  <p>For weather data, this research integrates multiple meteorological variables by time into a [time, variable, latitude, longitude] format for AFNO. Specifically: FourCastNet first projects the input variables on the 720 &times; 1440 lat-lon grid onto a 2D patch grid (h &times; w) (patch size is p &times; p, for example, p = 8), each patch is represented as a d-dimensional token. Then, the patch sequence, along with position encoding, is fed into a series of AFNO layers. As shown below:</p>
+
+  <p>&nbsp;</p>
+
+  <p>The training of FourCastNet is progressive, i.e., X(t) is taken as input to predict the next step X(t+1). One training output is multistep, compared with the true value to calculate the loss. Here, RMSE is used as the evaluation index for the loss in this paper.</p>
+
+  <h2><strong>Model Reconstruction</strong></h2>
+
+  <h2><strong>Training Results</strong></h2>
+
+  <h2><strong>Summary</strong></h2>
+
+  <p>&nbsp;</p>
+</div>

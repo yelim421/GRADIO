@@ -1,15 +1,24 @@
 import gradio as gr
 
-tts_examples = [
-    "I love learning machine learning",
-    "How do you do?",
-]
-
 def greet():
     print("Hello, Gradio")
     return ""
 
-readme = gr.Interface(
+# HTML 코드가 저장된 파일 읽기
+with open('readme.html', 'r', encoding='utf-8') as file:
+    readme_html_content = file.read()
+
+with open('aboutus.html', 'r', encoding='utf-8') as file:
+    aboutus_html_content = file.read()
+
+with open('details.html', 'r', encoding='utf-8') as file:
+    details_html_content = file.read()
+
+
+# Gradio HTML 인터페이스 만들기
+readme = gr.HTML(readme_html_content)
+
+future_pred = gr.Interface(
     fn=greet,
     inputs=None,
     outputs="text",
@@ -18,35 +27,20 @@ readme = gr.Interface(
     article="<p style='text-align: center'>Welcome to this Gradio Interface!</p>"
 )
 
-stt_demo = gr.load(
-    "huggingface/facebook/wav2vec2-base-960h",
-    title=None,
-    inputs="mic",
-    description="Let me try to guess what you're saying!",
+data_analysis = gr.Interface(
+    fn=greet,
+    inputs=None,
+    outputs="text",
+    title="Title of the Gradio Interface",
+    description="This is a simple Gradio Interface that returns a greeting.",
+    article="<p style='text-align: center'>Welcome to this Gradio Interface!</p>"
 )
 
-future_pred = gr.load(
-    "huggingface/facebook/fastspeech2-en-ljspeech",
-    title=None,
-    examples=tts_examples,
-    description="Give me something to say!",
-)
+details_page = gr.HTML(details_html_content)
 
-info_page = gr.load(
-    "huggingface/facebook/fastspeech2-en-ljspeech",
-    title=None,
-    examples=tts_examples,
-    description="Give me something to say!",
-)
+about_us = gr.HTML(aboutus_html_content)
 
-about_us = gr.load(
-    "huggingface/facebook/fastspeech2-en-ljspeech",
-    title=None,
-    examples=tts_examples,
-    description="Give me something to say!",
-)
-
-demo = gr.TabbedInterface([readme, stt_demo, future_pred, info_page, about_us], ["ReadMe", "Data Analysis", "Future Prediction", "More Information", "About Us"])
+demo = gr.TabbedInterface([readme, data_analysis, future_pred, details_page, about_us], ["Introduction", "Data Analysis", "Future Prediction", "Details", "About Us"])
 
 if __name__ == "__main__":
     demo.launch()
