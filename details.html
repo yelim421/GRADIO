@@ -2,23 +2,67 @@
 
 <hr />
 <div style="padding-left: 100px; padding-right: 100px;">
-  <h2><strong>AI Weather Forecast</strong></h2>
+  <h2><strong>What is the current weather forecasting model used by the meteorological agency?</strong></h2>
 
-  <p>Modern numerical weather prediction (NWP) can be traced back to 1920. It&#39;s based on physical principles and integrates the achievements and experiences of several generations of meteorologists. It&#39;s the mainstream weather forecasting method adopted by meteorological departments around the world. Among them, the high-resolution integrated forecasting system (IFS) model from the European Centre for Medium-Range Weather Forecasts (ECMWF) has performed best in global weather forecasts over the years.</p>
+    <p>Modern numerical weather prediction (NWP) is a scientific method of forecasting future weather conditions using complex mathematical models on computers. It&#39;s the mainstream weather forecasting method adopted by meteorological departments around the world. Among them, the high-resolution integrated forecasting system (IFS) model from ECMWF has been one of the best NWP over the years.</p>
 
-  <p>Recently, at the just-concluded Nvidia GTC Technology Conference, researchers from NVIDIA, Lawrence Berkeley National Laboratory, the University of Michigan Ann Arbor, and Rice University developed a forecast model based on the Fourier Neural Network called FourCastNet. It can generate global key weather indicator forecasts at a resolution of 0.25&deg;, which is equivalent to a spatial resolution of about 30&times;30 km near the equator and a global grid size of 720&times;1440 pixels, consistent with the IFS system. This achievement allows AI weather models to be directly compared with traditional physical models such as the IFS for the first time.</p>
+  <h2><strong>What are the benefits of implementing AI models?</strong></h2>
 
-  <p>FourCastNet uses GPU for training computations, which is about 45,000 times faster than traditional NWP models and saves energy by about 12,000 times. This allows it to generate a large number of sub-models for ensemble predictions at a very low cost. Experiments show that FourCastNet greatly improves the effectiveness of probabilistic weather forecasting and can generate large-scale ensemble forecasts for hurricanes, atmospheric rivers, and extreme precipitation events in just a few seconds.</p>
+    <p>Artificial Intelligence (AI) is increasingly being used in weather prediction due to its ability to efficiently process massive amounts of data and recognize complex patterns within it. Unlike traditional NWP models which involve a time-consuming process of manually encoding physical laws into the model, AI can learn from past weather data to improve the accuracy of future forecasts. Furthermore, the speed at which AI models can process data enables them to provide real-time or near-real-time forecasts, significantly improving upon the time latency inherent in traditional models. In essence, AI offers a robust, fast, and data-driven approach to weather forecasting, significantly augmenting traditional methods with its predictive prowess and speed.</p>
 
-  <p>In our project, we focused on studying the integration of FCN, which was trained on ERA5 data, with the JMA Best Track data. This effort aims to harness the robust predictive power of FCN and the highly accurate historical records of the JMA to enhance the accuracy and efficiency of our weather forecasting model.</p>
+    <h2><strong>What is FCN and how is it different from conventional models?</strong></h2>
 
-  <h2><strong>Datasets</strong></h2>
+    <p>FCN is an innovative weather prediction model rooted in AI. This model is the brainchild of researchers from NVIDIA, Lawrence Berkeley National Laboratory, the University of Michigan Ann Arbor, and Rice University. FourCastNet excels in forecasting high-resolution, rapid-timescale variables such as surface wind speed, precipitation, and atmospheric water vapor by discerning various patterns embedded in diverse meteorological data. This capability is crucial for strategic planning of wind energy resources and accurate prediction of extreme weather phenomena like tropical cyclones, extra-tropical cyclones, and atmospheric rivers. In terms of accuracy, FCN matches IFS and even outperforms that model when dealing with variables that encompass intricate microscale structures, such as precipitation. Remarkably, FCN can produce a week-long forecast in less than 2 seconds, a speed that is significantly faster than IFS. This rapidity enables FourCastNet to generate swift and economical large-ensemble forecasts with thousands of ensemble members, thereby enhancing the quality of probabilistic forecasting.</p>
 
-  <p>The European Centre for Medium-Range Weather Forecasts (ECMWF) provides a publicly available integrated dataset known as <a href="https://www.ecmwf.int/en/forecasts/datasets/reanalysis-datasets/era5">ERA5</a>. As the fifth-generation global climate reanalysis, ERA5 combines its physical model data with observational data from around the world to form a complete and consistent global dataset. This data ranges from hourly to daily and includes a variety of global meteorological indicators such as temperature, wind volume, precipitation, hydrology, and atmospheric pressure. It serves as a learning resource for various weather forecasting models.&nbsp;</p>
+<p><span style="font-size:22px"><span style="font-family:Arial,Helvetica,sans-serif"><strong>Understanding the Key Concepts and Architecture of FCN:</strong></span></span></p>
 
-  <p>FourCastNet uses ERA5 for training and focuses on forecasting two major meteorological variables: wind speed at 10 meters above the Earth&#39;s surface and the total precipitation over 6 hours. These factors are essential for issuing early warnings of extreme weather and natural disasters. The prediction of these two indicators is also considered one of the more challenging problems in the field of meteorology.</p>
+<p><span style="font-size:16px"><span style="font-family:Arial,Helvetica,sans-serif">AFNO&nbsp;</span></span><br />
+<span style="font-size:14px"><span style="font-family:Arial,Helvetica,sans-serif">The Adaptive Fourier Neural Operator (AFNO) is a machine learning model used for learning patterns in high-dimensional data such as images or time-series data. It is based on the Fourier transform, which converts data into the frequency domain, allowing it to effectively learn global patterns in the data and efficiently handle high-resolution data. These characteristics are particularly useful in dealing with data that have complex patterns, such as in weather forecasting.</span></span></p>
 
-  <p>To this end, FourCastNet selected 20 relevant meteorological indicators, including potential height, temperature, wind speed, and relative humidity at several different vertical heights, as well as some near-surface variables such as ground pressure and mean sea-level pressure. These serve as inputs to the model to uncover the impact of the relationships among these variables on wind speed and precipitation. The specific variables are as follows:</p>
+<p><br />
+<span style="font-size:16px"><span style="font-family:Arial,Helvetica,sans-serif">ViT&nbsp;</span></span><br />
+<span style="font-size:14px"><span style="font-family:Arial,Helvetica,sans-serif">The Vision Transformer (ViT) is a machine learning model that applies transformer architecture, originally designed for natural language processing, to visual data. It treats an image as a sequence of patches or &#39;tokens&#39;, allowing it to capture both local and global patterns in the data. This approach has shown remarkable performance on a variety of computer vision tasks and scales well with increased model and dataset sizes.</span></span></p>
+
+<p>&nbsp;</p>
+
+<p><span style="font-size:16px"><span style="font-family:Arial,Helvetica,sans-serif">Token-mixing scheme</span></span><br />
+<span style="font-size:14px"><span style="font-family:Arial,Helvetica,sans-serif">The token-mixing scheme is a part of ViT architecture that allows the model to capture interactions between different parts of an image. In the context of the FourCastNet model, a Fourier transform-based token-mixing scheme is used. This approach treats the mixing operation as a continuous global convolution, implemented efficiently in the Fourier domain with Fast Fourier Transforms (FFTs). This allows the model to handle high-resolution data efficiently and effectively.</span></span></p>
+
+<p>&nbsp;</p>
+
+<p><span style="font-size:16px"><span style="font-family:Arial,Helvetica,sans-serif">Autoregressive inference</span></span><br />
+<span style="font-size:14px"><span style="font-family:Arial,Helvetica,sans-serif">Autoregressive inference is a method used in machine learning and statistics where predictions for future data points are made based on the values of previous data points. In the context of time series data, like weather forecasting, an autoregressive model would predict future weather conditions based on past weather data. The term &quot;auto&quot; refers to the model&#39;s use of its own previous outputs as inputs for future predictions. This approach is particularly useful for tasks that involve sequential data, where the order of data points is important.</span></span></p>
+
+<p>&nbsp;</p>
+
+<p><strong><span style="font-size:18px"><span style="font-family:Arial,Helvetica,sans-serif">Step-by-Step Breakdown of the FourCastNet (FCN) Architecture</span></span></strong></p>
+
+<p>&nbsp;</p>
+
+<p><strong><span style="font-size:18px"><span style="font-family:Arial,Helvetica,sans-serif"><img alt="" src="https://ifh.cc/g/THvjK3.jpg" style="height:612px; width:926px" /></span></span></strong></p>
+
+<p>&nbsp;</p>
+
+<p><span style="font-size:14px"><span style="font-family:Arial,Helvetica,sans-serif">Step 1.&nbsp; &nbsp; The input variables are inputted into a lat-lon 2D grid (720 * 1440) and divided into (h * w) patches. Each patch is small, typically 8 * 8, and is represented as a d-dimensional token.</span></span><br />
+&nbsp;</p>
+
+<p><span style="font-size:14px"><span style="font-family:Arial,Helvetica,sans-serif">Step 2.&nbsp;&nbsp; &nbsp;A sequence is assigned to these divided patches, and positional information is also given. This is referred to as patch embedding and positional embedding.</span></span></p>
+
+<p style="text-align:justify"><br />
+<span style="font-size:14px"><span style="font-family:Arial,Helvetica,sans-serif">Step 3.&nbsp;&nbsp; &nbsp;Each layer is given an input tensor of patches (X = R^(hwd)), through which spatial mixing is performed. This spatial mixing takes place in the Fourier domain.</span></span></p>
+
+<p style="text-align:justify"><br />
+<span style="font-size:14px"><span style="font-family:Arial,Helvetica,sans-serif">Step 4.&nbsp;&nbsp; &nbsp;In the Fourier domain, the 2D discrete Fourier transform (DFT) is used to transform the tokens. This is a part of the spatial mixing process.</span></span></p>
+
+<p style="text-align:justify"><br />
+<span style="font-size:14px"><span style="font-family:Arial,Helvetica,sans-serif">Step 5.&nbsp;&nbsp; &nbsp;In the Fourier domain, weights are assigned to the tokens, and soft-thresholding and shrinkage are performed for sparsity.</span></span></p>
+
+<p style="text-align:justify"><br />
+<span style="font-size:14px"><span style="font-family:Arial,Helvetica,sans-serif">Step 6.&nbsp;&nbsp; &nbsp;After performing the inverse Fourier transform in the patch domain, residuals are added to prevent loss of original information.</span></span><br />
+&nbsp;</p>
+
+<p style="text-align:justify"><br />
+<strong><span style="font-size:20px"><span style="font-family:Arial,Helvetica,sans-serif">Input Data for training FCN</span></span></strong></p>
 
   <table align="center" border="2" style="width:500px">
       <thead>
@@ -84,25 +128,11 @@
       </li>
   </ol>
 
-  <h2><strong>Model Introduction</strong></h2>
+<p><span style="font-size:14px"><span style="font-family:Arial,Helvetica,sans-serif">The ECMWF reanalysis project, also known as ERA5, is a meteorological reanalysis project carried out by ECMWF. This project has generated reanalyses for several years, with the most recent product, ERA5, offering higher spatial resolution (31 km) and covering the period from 1979 to the present. The reanalysis makes use of various sources of meteorological observations, including radiosondes, balloons, aircraft, buoys, satellites, and scatterometers. The data is run through the ECMWF computer model at a 125 km resolution. The reanalysis was done to improve the accuracy of historical weather maps and aid in a more detailed analysis of various weather systems through a period that was lacking in computerized data.</span></span></p>
 
-  <p>To make global weather predictions at a 0.25&deg; resolution, FourCastNet uses Adaptive Fourier Neural Operator (AFNO), an improvement on the Vision Transformer (ViT) model. It constructs the mixing operation steps into continuous global convolutions, effectively implemented in the Fourier domain through FFT. This design reduces the spatial mixing complexity to O(N log N), allowing flexible and scalable modeling of cross-space and channel dependencies. The structure of AFNO is shown in the following figure:</p>
+<p><span style="font-size:14px"><span style="font-family:Arial,Helvetica,sans-serif">The variables used in the FourCastNet model from the ERA5 dataset include surface pressure, two-meter temperature, total column water, and several others. These variables are specifically chosen to model important processes that influence low-level winds and precipitation.&nbsp;</span></span><span style="font-size:14px"><span style="font-family:Arial,Helvetica,sans-serif">Please refer to the table above for a detailed list of the variables used in FCN from the ERA5 dataset.The data is normalized by subtracting the mean and dividing by the standard deviation, calculated over the entire training period. The model is trained to predict the future state of these variables given their past states. The training is done using a sliding window approach, where the model is trained to predict the state of the variables at a future time step given their states at the current and past time steps. The model is trained using the Adam optimizer with a learning rate of 1e-4 and a batch size of 1. The training loss is the mean squared error between the model&#39;s predictions and the true future states of the variables. The model is trained for 200 epochs, and the model with the lowest validation loss is selected for evaluation.</span></span></p>
 
-  <p>&nbsp;</p>
+<p style="text-align:justify">&nbsp;</p>
 
-  <p>In the spatial mixing step, GFNet uses cross-channel element-wise matrix multiplication, FNO uses full matrix multiplication mixing all channels, while AFNO combines MLP and soft threshold for block matrix multiplication.</p>
-
-  <p>For weather data, this research integrates multiple meteorological variables by time into a [time, variable, latitude, longitude] format for AFNO. Specifically: FourCastNet first projects the input variables on the 720 &times; 1440 lat-lon grid onto a 2D patch grid (h &times; w) (patch size is p &times; p, for example, p = 8), each patch is represented as a d-dimensional token. Then, the patch sequence, along with position encoding, is fed into a series of AFNO layers. As shown below:</p>
-
-  <p>&nbsp;</p>
-
-  <p>The training of FourCastNet is progressive, i.e., X(t) is taken as input to predict the next step X(t+1). One training output is multistep, compared with the true value to calculate the loss. Here, RMSE is used as the evaluation index for the loss in this paper.</p>
-
-  <h2><strong>Model Reconstruction</strong></h2>
-
-  <h2><strong>Training Results</strong></h2>
-
-  <h2><strong>Summary</strong></h2>
-
-  <p>&nbsp;</p>
+<p style="text-align:justify">&nbsp;</p>
 </div>
