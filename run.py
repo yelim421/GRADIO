@@ -47,7 +47,9 @@ future_pred = gr.Interface(
 data_analysis = gr.Interface(
     lambda name: f"Greetings {name}!",
     inputs=None,
-    outputs=gr.PlayableVideo(value="ezgif-4-101dbb433e.mp4")
+    outputs=gr.PlayableVideo(value="ezgif-4-101dbb433e.mp4"),
+    autoplay = True,
+    label = "Please don't click any button below."
 )
 
 
